@@ -90,20 +90,18 @@ class _MyHomePageState extends State<MyHomePage> {
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
+                  Contact c = snapshot.data[index];
                   return Column(children: [
                     ListTile(
-                      title: MaterialButton(
-                        child: Text(snapshot.data[index].displayName),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  DetailPage(contact: snapshot.data[index])),
-                        ),
-                      ),
-                      leading: Checkbox(
-                        value: true,
-                        onChanged: null,
+                      leading: (c.avatar != null && c.avatar.length > 0)
+                          ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
+                          : CircleAvatar(child: Text(c.initials())),
+                      title: Text(snapshot.data[index].displayName),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                DetailPage(contact: snapshot.data[index])),
                       ),
                     ),
                     Divider()
