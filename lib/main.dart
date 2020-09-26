@@ -1,3 +1,4 @@
+import 'package:contactsios/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
 
@@ -60,11 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
               Icons.exit_to_app,
               color: Colors.white,
             ),
-            onPressed: null,
+            onPressed: () => null,
           ),
         ],
       ),
-      body: Center(
+      body: Container(
         child: buildContacts(),
       ),
       floatingActionButton: FloatingActionButton(
@@ -91,7 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (BuildContext context, int index) {
                   return Column(children: [
                     ListTile(
-                      title: Text(snapshot.data[index].displayName),
+                      title: MaterialButton(
+                        child: Text(snapshot.data[index].displayName),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  DetailPage(contact: snapshot.data[index])),
+                        ),
+                      ),
                       leading: Checkbox(
                         value: true,
                         onChanged: null,
