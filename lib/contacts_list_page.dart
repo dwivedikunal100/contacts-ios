@@ -8,6 +8,8 @@ class ContactListPage extends StatefulWidget {
 
 class _ContactListPageState extends State<ContactListPage> {
   List<Contact> _contacts;
+  bool _isSelectable = false;
+  Map<Contact, bool> _toDelete;
 
   get iOSLocalizedLabels => true;
 
@@ -20,23 +22,16 @@ class _ContactListPageState extends State<ContactListPage> {
   Future<void> refreshContacts() async {
     var contacts = (await ContactsService.getContacts()).toList();
     setState(() {
+      _isSelectable = false;
       _contacts = contacts;
+      _toDelete =
+          Map.fromIterable(contacts, key: (e) => e, value: (e) => false);
     });
-  }
-
-  void updateContact() async {
-    Contact ninja = _contacts
-        .toList()
-        .firstWhere((contact) => contact.familyName.startsWith("Ninja"));
-    ninja.avatar = null;
-    await ContactsService.updateContact(ninja);
-
-    refreshContacts();
   }
 
   _openContactForm() async {
     try {
-      var contact = await ContactsService.openContactForm(
+      await ContactsService.openContactForm(
           iOSLocalizedLabels: iOSLocalizedLabels);
       refreshContacts();
     } on FormOperationException catch (e) {
@@ -60,33 +55,38 @@ class _ContactListPageState extends State<ContactListPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.create),
-            onPressed: null,
+            onPressed: toggleSelectable,
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add), onPressed: _openContactForm),
+          child: _isSelectable ? Icon(Icons.delete) : Icon(Icons.add),
+          onPressed:
+              _isSelectable ? _deleteSelectedContacts : _openContactForm),
       body: SafeArea(
         child: _contacts != null
             ? ListView.builder(
                 itemCount: _contacts?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
                   Contact c = _contacts?.elementAt(index);
-                  return ListTile(
-                    onTap: () {
-                      var temp = Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => ContactDetailsPage(
-                                c,
-                                onContactDeviceSave:
-                                    contactOnDeviceHasBeenUpdated,
-                              )));
-                      temp.then((value) => refreshContacts());
-                    },
-                    leading: (c.avatar != null && c.avatar.length > 0)
-                        ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
-                        : CircleAvatar(child: Text(c.initials())),
-                    title: Text(c.displayName ?? ""),
-                  );
+                  return Column(children: [
+                    Row(children: [
+                      Container(
+                        child: checkBoxOrAvatar(c),
+                        width: 70,
+                      ),
+                      Expanded(
+                          child: InkWell(
+                        onTap: () => _isSelectable ? null : gotoDetailPage(c),
+                        child: Text(
+                          c.displayName ?? "",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                      ))
+                    ]),
+                    Divider()
+                  ]);
                 },
               )
             : Center(
@@ -94,6 +94,51 @@ class _ContactListPageState extends State<ContactListPage> {
               ),
       ),
     );
+  }
+
+  void gotoDetailPage(Contact c) {
+    var temp = Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => ContactDetailsPage(
+              c,
+              onContactDeviceSave: contactOnDeviceHasBeenUpdated,
+            )));
+    temp.then((value) => refreshContacts());
+  }
+
+  void _deleteSelectedContacts() {
+    _toDelete.forEach((key, value) {
+      if (value) {
+        ContactsService.deleteContact(key);
+      }
+    });
+    refreshContacts();
+  }
+
+  void toggleSelectable() {
+    setState(() {
+      this._isSelectable = _isSelectable ? false : true;
+      _toDelete =
+          Map.fromIterable(_contacts, key: (e) => e, value: (e) => false);
+    });
+  }
+
+  void selectUnSelect(Contact c) {
+    _toDelete[c] = _toDelete[c] ? false : true;
+    setState(() {
+      this._toDelete = _toDelete;
+    });
+  }
+
+  Widget checkBoxOrAvatar(Contact c) {
+    if (_isSelectable) {
+      return Checkbox(value: _toDelete[c], onChanged: (x) => selectUnSelect(c));
+    } else
+      return MaterialButton(
+        child: (c.avatar != null && c.avatar.length > 0)
+            ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
+            : CircleAvatar(child: Text(c.initials())),
+        onPressed: () => gotoDetailPage(c),
+      );
   }
 
   void contactOnDeviceHasBeenUpdated(Contact contact) {
@@ -152,6 +197,12 @@ class ContactDetailsPage extends StatelessWidget {
       body: SafeArea(
         child: ListView(
           children: <Widget>[
+            ListTile(
+              title: Text("Avatar"),
+              trailing: (_contact.avatar != null && _contact.avatar.length > 0)
+                  ? CircleAvatar(backgroundImage: MemoryImage(_contact.avatar))
+                  : CircleAvatar(child: Text(_contact.initials())),
+            ),
             ListTile(
               title: Text("Name"),
               trailing: Text(_contact.givenName ?? ""),
