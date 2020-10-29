@@ -44,18 +44,18 @@ class _ContactListPageState extends State<ContactListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Contacts Manager',
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.create),
+            icon: const Icon(Icons.create),
             onPressed: toggleSelectable,
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          child: _isSelectable ? Icon(Icons.delete) : Icon(Icons.add),
+          child: _isSelectable ? const Icon(Icons.delete) : const Icon(Icons.add),
           onPressed:
               _isSelectable ? _deleteSelectedContacts : _openContactForm),
       body: SafeArea(
@@ -172,14 +172,14 @@ class ContactDetailsPage extends StatelessWidget {
         title: Text(_contact.displayName ?? ""),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               ContactsService.deleteContact(_contact);
               Navigator.pop(context);
             },
           ),
           IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () => _openExistingContactOnDevice(context)),
         ],
       ),
@@ -187,47 +187,47 @@ class ContactDetailsPage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             ListTile(
-              title: Text("Avatar"),
+              title: const ext("Avatar"),
               trailing: (_contact.avatar != null && _contact.avatar.length > 0)
                   ? CircleAvatar(backgroundImage: MemoryImage(_contact.avatar))
                   : CircleAvatar(child: Text(_contact.initials())),
             ),
             ListTile(
-              title: Text("Name"),
+              title: const Text("Name"),
               trailing: Text(_contact.givenName ?? ""),
             ),
             ListTile(
-              title: Text("Middle name"),
+              title: const Text("Middle name"),
               trailing: Text(_contact.middleName ?? ""),
             ),
             ListTile(
-              title: Text("Family name"),
+              title: const Text("Family name"),
               trailing: Text(_contact.familyName ?? ""),
             ),
             ListTile(
-              title: Text("Prefix"),
+              title: const Text("Prefix"),
               trailing: Text(_contact.prefix ?? ""),
             ),
             ListTile(
-              title: Text("Suffix"),
+              title: const Text("Suffix"),
               trailing: Text(_contact.suffix ?? ""),
             ),
             ListTile(
-              title: Text("Birthday"),
+              title: const Text("Birthday"),
               trailing: Text(_contact.birthday != null
                   ? _contact.birthday.toString()
                   : ""),
             ),
             ListTile(
-              title: Text("Company"),
+              title: const Text("Company"),
               trailing: Text(_contact.company ?? ""),
             ),
             ListTile(
-              title: Text("Job"),
+              title: const Text("Job"),
               trailing: Text(_contact.jobTitle ?? ""),
             ),
             ListTile(
-              title: Text("Account Type"),
+              title: const Text("Account Type"),
               trailing: Text((_contact.androidAccountType != null)
                   ? _contact.androidAccountType.toString()
                   : ""),
@@ -259,23 +259,21 @@ class AddressesTile extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         ListTile(
-                          title: Text("Street"),
+                          title: const Text("Street"),
                           trailing: Text(a.street ?? ""),
                         ),
                         ListTile(
-                          title: Text("Postcode"),
+                          title: const Text("Postcode"),
                           trailing: Text(a.postcode ?? ""),
                         ),
                         ListTile(
-                          title: Text("City"),
-                          trailing: Text(a.city ?? ""),
-                        ),
+                          title: const 
                         ListTile(
-                          title: Text("Region"),
+                          title: const Text("Region"),
                           trailing: Text(a.region ?? ""),
                         ),
                         ListTile(
-                          title: Text("Country"),
+                          title: const Text("Country"),
                           trailing: Text(a.country ?? ""),
                         ),
                       ],
