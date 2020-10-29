@@ -61,9 +61,9 @@ class _ContactListPageState extends State<ContactListPage> {
       body: SafeArea(
         child: _contacts != null
             ? ListView.builder(
-                itemCount: _contacts?.length ?? 0,
+                itemCount: _contacts.length,
                 itemBuilder: (BuildContext context, int index) {
-                  Contact c = _contacts?.elementAt(index);
+                  Contact c = _contacts.elementAt(index);
                   return Column(children: [
                     Row(children: [
                       Container(
