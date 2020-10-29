@@ -187,7 +187,7 @@ class ContactDetailsPage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             ListTile(
-              title: const ext("Avatar"),
+              title: const Text("Avatar"),
               trailing: (_contact.avatar != null && _contact.avatar.length > 0)
                   ? CircleAvatar(backgroundImage: MemoryImage(_contact.avatar))
                   : CircleAvatar(child: Text(_contact.initials())),
@@ -267,8 +267,9 @@ class AddressesTile extends StatelessWidget {
                           trailing: Text(a.postcode ?? ""),
                         ),
                         ListTile(
-                          title: const 
-                        ListTile(
+                          title: const Text("City"),
+                          trailing: Text(a.city ?? ""),
+                        ),                        ListTile(
                           title: const Text("Region"),
                           trailing: Text(a.region ?? ""),
                         ),
