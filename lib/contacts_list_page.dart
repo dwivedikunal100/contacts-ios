@@ -36,13 +36,7 @@ class _ContactListPageState extends State<ContactListPage> {
       );
       refreshContacts();
     } on FormOperationException catch (e) {
-      switch (e.errorCode) {
-        case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-        case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-        case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-        default:
-          print(e.errorCode);
-      }
+      print(e.errorCode);
     }
   }
 
@@ -167,13 +161,7 @@ class ContactDetailsPage extends StatelessWidget {
       }
       Navigator.of(context).pop();
     } on FormOperationException catch (e) {
-      switch (e.errorCode) {
-        case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-        case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-        case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-        default:
-          print(e.errorCode);
-      }
+      print(e.errorCode);
     }
   }
 
