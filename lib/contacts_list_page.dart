@@ -96,13 +96,13 @@ class _ContactListPageState extends State<ContactListPage> {
     );
   }
 
-  void gotoDetailPage(Contact c) {
-    var temp = Navigator.of(context).push(MaterialPageRoute(
+  void gotoDetailPage(Contact contact) {
+    await Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ContactDetailsPage(
-              c,
+              contact,
               onContactDeviceSave: contactOnDeviceHasBeenUpdated,
             )));
-    temp.then((value) => refreshContacts());
+    refreshContacts();
   }
 
   void _deleteSelectedContacts() {
