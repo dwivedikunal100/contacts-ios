@@ -32,7 +32,7 @@ class _ContactListPageState extends State<ContactListPage> {
   _openContactForm() async {
     try {
       await ContactsService.openContactForm(
-          iOSLocalizedLabels: iOSLocalizedLabels,
+        iOSLocalizedLabels: iOSLocalizedLabels,
       );
       refreshContacts();
     } on FormOperationException catch (e) {
@@ -55,7 +55,8 @@ class _ContactListPageState extends State<ContactListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          child: _isSelectable ? const Icon(Icons.delete) : const Icon(Icons.add),
+          child:
+              _isSelectable ? const Icon(Icons.delete) : const Icon(Icons.add),
           onPressed:
               _isSelectable ? _deleteSelectedContacts : _openContactForm),
       body: SafeArea(
@@ -92,7 +93,7 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   void gotoDetailPage(Contact contact) {
-    await Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ContactDetailsPage(
               contact,
               onContactDeviceSave: contactOnDeviceHasBeenUpdated,
@@ -138,7 +139,8 @@ class _ContactListPageState extends State<ContactListPage> {
 
   void contactOnDeviceHasBeenUpdated(Contact contact) {
     this.setState(() {
-      final id = _contacts.indexWhere((c) => c.identifier == contact.identifier);
+      final id =
+          _contacts.indexWhere((c) => c.identifier == contact.identifier);
       _contacts[id] = contact;
     });
   }
@@ -269,7 +271,8 @@ class AddressesTile extends StatelessWidget {
                         ListTile(
                           title: const Text("City"),
                           trailing: Text(a.city ?? ""),
-                        ),                        ListTile(
+                        ),
+                        ListTile(
                           title: const Text("Region"),
                           trailing: Text(a.region ?? ""),
                         ),
