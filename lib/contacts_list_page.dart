@@ -20,7 +20,7 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   Future<void> refreshContacts() async {
-    var contacts = (await ContactsService.getContacts()).toList();
+    final contacts = (await ContactsService.getContacts()).toList();
     setState(() {
       _isSelectable = false;
       _contacts = contacts;
@@ -143,7 +143,7 @@ class _ContactListPageState extends State<ContactListPage> {
 
   void contactOnDeviceHasBeenUpdated(Contact contact) {
     this.setState(() {
-      var id = _contacts.indexWhere((c) => c.identifier == contact.identifier);
+      final id = _contacts.indexWhere((c) => c.identifier == contact.identifier);
       _contacts[id] = contact;
     });
   }
@@ -159,7 +159,7 @@ class ContactDetailsPage extends StatelessWidget {
 
   _openExistingContactOnDevice(BuildContext context) async {
     try {
-      var contact = await ContactsService.openExistingContact(_contact,
+      final contact = await ContactsService.openExistingContact(_contact,
           iOSLocalizedLabels: iOSLocalizedLabels);
       if (onContactDeviceSave != null) {
         onContactDeviceSave(contact);
