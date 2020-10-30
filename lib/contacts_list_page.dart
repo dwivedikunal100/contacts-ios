@@ -65,24 +65,7 @@ class _ContactListPageState extends State<ContactListPage> {
                 itemCount: _contacts.length,
                 itemBuilder: (BuildContext context, int index) {
                   Contact c = _contacts.elementAt(index);
-                  return Column(children: [
-                    Row(children: [
-                      Container(
-                        child: checkBoxOrAvatar(c),
-                        width: 70,
-                      ),
-                      Expanded(
-                          child: InkWell(
-                        onTap: () => _isSelectable ? null : gotoDetailPage(c),
-                        child: Text(
-                          c.displayName ?? "",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 17.0),
-                        ),
-                      ))
-                    ]),
-                    Divider()
-                  ]);
+                  return _buildContact(c);
                 },
               )
             : Center(
@@ -90,6 +73,27 @@ class _ContactListPageState extends State<ContactListPage> {
               ),
       ),
     );
+  }
+
+  Widget _buildContact(Contact c) {
+    return Column(children: [
+      Row(children: [
+        Container(
+          child: checkBoxOrAvatar(c),
+          width: 70,
+        ),
+        Expanded(
+            child: InkWell(
+          onTap: () => _isSelectable ? null : gotoDetailPage(c),
+          child: Text(
+            c.displayName ?? "",
+            textAlign: TextAlign.left,
+            style: TextStyle(fontSize: 17.0),
+          ),
+        ))
+      ]),
+      Divider()
+    ]);
   }
 
   void gotoDetailPage(Contact contact) {
