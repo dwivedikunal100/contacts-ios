@@ -106,12 +106,14 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   void _deleteSelectedContacts() {
-    _toDelete.forEach((key, value) {
-      if (value) {
-        ContactsService.deleteContact(key);
-      }
-    });
-    refreshContacts();
+    if (_toDelete != null) {
+      _toDelete.forEach((key, value) {
+        if (value) {
+          ContactsService.deleteContact(key);
+        }
+      });
+      refreshContacts();
+    }
   }
 
   void toggleSelectable() {
